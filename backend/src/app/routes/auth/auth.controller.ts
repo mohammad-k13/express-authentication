@@ -15,8 +15,9 @@ authRouter.post("/login", async (req: Request, res: Response) => {
           if(!user){ res.status(404).send({message: "User Not Found"}); return;}
 
           const passwordMatch = await user.comparePassword(password)
-          if(passwordMatch) {
-            res.status(401).send({message: "Invalid Password"})
+          if(!passwordMatch) {
+            res.status(401).send({message: "Invalid Password"});
+            return;
           }
 
           res.status(200).send({ message: "Login successful" });
