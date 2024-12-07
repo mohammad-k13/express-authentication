@@ -4,15 +4,14 @@ const userRouter = Router();
 
 userRouter.post("/users", async (req: Request, res: Response) => {
       console.log(req);
-    const { email, password } = req.body;
+    const { email, password, username } = req.body;
 
-    if (!email || !password) {
-        res.send({ message: "information is not fully correct" });
+    if (!email || !password || !username) {
+        res.status(403).send({ message: "information is not fully correct" });
     }
 
     try {
-      console.log(email);
-      console.log(password)
+      
     } catch (err) {}
 });
 
