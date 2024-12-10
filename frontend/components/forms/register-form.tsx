@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button";
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { toast } from "sonner";
+import { useEffect } from "react";
 
 const formSchema = z.object({
     username: z.string().min(2, {
@@ -30,6 +31,11 @@ export function RegisterFrom() {
             password: "",
         },
     });
+
+    const handleUsernameBlur = async (username: string) => {
+        //task send request
+        form.setError("username", {message: "username is taken"})
+    };
 
     async function onSubmit(values: z.infer<typeof formSchema>) {
         try {
@@ -54,6 +60,7 @@ export function RegisterFrom() {
             toast.error("Faild to Fetch");
         }
     }
+
     return (
         <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
@@ -64,7 +71,14 @@ export function RegisterFrom() {
                         <FormItem>
                             <FormLabel>Username</FormLabel>
                             <FormControl>
-                                <Input placeholder="username" {...field} />
+                            <Input
+                    placeholder="username"
+                    {...field}
+                    onBlur={(event) => {
+                        field.onBlur(); // Ensure React Hook Form's default behavior is preserved
+                        handleUsernameBlur(event.target.value); // Your custom logic
+                    }}
+                />
                             </FormControl>
                             <FormDescription>This is your public display name.</FormDescription>
                             <FormMessage />

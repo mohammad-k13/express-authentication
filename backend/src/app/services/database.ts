@@ -1,17 +1,38 @@
 import { config } from "dotenv";
-import mongoose from "mongoose";
+import mongoose, { Mongoose } from "mongoose";
 
 config();
 const MONGO_URI = process.env.DB_URL as string;
 
-const connectDB = async () => {
-  try {
-    await mongoose.connect(MONGO_URI);
-    console.log("MongoDB connected successfully");
-  } catch (error: any) {
-    console.error("Error connecting to MongoDB:", error.message);
-    process.exit(1)
+let cached: any = (globalThis as any).mongoose as Mongoose;
+
+if (!cached) {
+  cached = (globalThis as any).mongoose = { conn: null, promise: null };
+}
+
+async function connectDB() {
+  if (cached.conn) {
+    return cached.conn;
   }
-};
+
+  if (!cached.promise) {
+    const opts = {
+      bufferCommands: false,
+    };
+
+    cached.promise = mongoose.connect(MONGO_URI, opts).then((mongoose) => {
+      return mongoose;
+    });
+  }
+
+  try {
+    cached.conn = await cached.promise;
+  } catch (e) {
+    cached.promise = null;
+    throw e;
+  }
+
+  return cached.conn;
+}
 
 export default connectDB;
