@@ -4,10 +4,13 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
+import Cookies from "js-cookie"
+
 import { Button } from "@/components/ui/button";
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { toast } from "sonner";
+import { useRouter } from "next/router";
 
 const formSchema = z.object({
     email: z.string().email().min(2, {
@@ -19,6 +22,8 @@ const formSchema = z.object({
 });
 
 export function LoginForm() {
+    const { push } = useRouter();
+
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
         defaultValues: {
@@ -37,10 +42,11 @@ export function LoginForm() {
                 body: JSON.stringify(values),
             });
 
-            console.log(res);
-            const { message } = await res.json();
+            const { message, sessionToken, url} = await res.json();
             if (res.ok) {
+                Cookies.set("session", sessionToken, {expires: 1 / 8640,})
                 toast.success(message);
+                url && push(url);
                 form.reset();
             } else {
                 toast.error(message);

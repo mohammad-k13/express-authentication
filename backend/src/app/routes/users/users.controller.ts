@@ -15,13 +15,13 @@ userRouter.post("/users", async (req: Request, res: Response) => {
         if (existing_user) {
             res.status(409).send({ message: "Email has Taken" });
             return;
+
         }
         const newUser = await User.create({
             email,
             username,
             password,
         });
-        console.log(newUser);
 
         res.status(201).send({ message: "user created!" });
     } catch (err) {
