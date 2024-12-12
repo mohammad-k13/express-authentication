@@ -4,7 +4,7 @@ interface IUser extends Document {
   username: string;
   email: string;
   password: string;
-  createdAt: Date;
+  role: "admin" | "user"
   comparePassword(candidatePassword: string): Promise<boolean>;
 }
 

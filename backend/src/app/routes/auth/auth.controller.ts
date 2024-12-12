@@ -1,5 +1,7 @@
 import { type Request, type Response, Router } from "express"
 import User from "../../models/user.model";
+import Session from "../../models/session.model";
+import { sign } from 'jsonwebtoken'
 
 const authRouter = Router();
 
@@ -20,7 +22,10 @@ authRouter.post("/login", async (req: Request, res: Response) => {
             return;
           }
 
-          res.status(200).send({ message: "Login successful" });
+
+          const sessionToken = sign({userId: user._id}, process.env.SECERT_KYE || "", {expiresIn: "1h"})
+          const session = await Session.create({sessionToken: sessionToken, userId: user._id})
+          res.status(200).send({ message: "Login successful", sessionToken: session.sessionToken, url: user.role });
       } catch (err) {
           console.log(err);
           res.status(500).send({ message: "Internal server error" });

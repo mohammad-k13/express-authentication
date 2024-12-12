@@ -23,10 +23,13 @@ const userSchema = new mongoose.Schema<IUser>({
     required: true,
     minlength: 1,
   },
-  createdAt: {
-    type: Date,
-    default: Date.now,
-  },
+  role: {
+    type: String,
+    enum: ["admin", "user"],
+    required: true,
+  }
+}, {
+  timestamps: true,
 });
 
 // Hash the password before saving
