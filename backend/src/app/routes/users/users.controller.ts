@@ -21,6 +21,7 @@ userRouter.post("/users", async (req: Request, res: Response) => {
             email,
             username,
             password,
+            role: "user"
         });
 
         res.status(201).send({ message: "user created!" });
