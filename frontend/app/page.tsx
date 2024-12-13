@@ -1,3 +1,6 @@
+"use client"
+
+import {signIn} from "next-auth/react"
 import LoginForm from "@/components/forms/login-form";
 import { RegisterFrom } from "@/components/forms/register-form";
 import { Button } from "@/components/ui/button";
@@ -9,10 +12,11 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 const Home = () => {
     return (
         <section className="w-full h-screen flex items-center justify-center">
-            <Tabs defaultValue="account" className="w-[400px] h-[600px] flex items-center justify-start flex-col">
-                <TabsList className="grid w-full grid-cols-2">
+            <Tabs defaultValue="account" className="min-w-[400px] h-[600px] flex items-center justify-start flex-col">
+                <TabsList className="grid w-full grid-cols-3">
                     <TabsTrigger value="account">Register</TabsTrigger>
                     <TabsTrigger value="password">Login</TabsTrigger>
+                    <TabsTrigger value="providers">Providers</TabsTrigger>
                 </TabsList>
                 <TabsContent value="account" className="w-full">
                     <Card>
@@ -33,6 +37,16 @@ const Home = () => {
                         </CardHeader>
                         <CardContent>
                             <LoginForm />
+                        </CardContent>
+                    </Card>
+                </TabsContent>
+                <TabsContent value="providers" className="w-full flex flex-col items-center gap-3">
+                    <Card className="w-full">
+                        <CardHeader></CardHeader>
+                        <CardContent>
+                            <Button className="w-full" onClick={ () => {
+                                 signIn("github")
+                            }}>Github Provider</Button>
                         </CardContent>
                     </Card>
                 </TabsContent>

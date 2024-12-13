@@ -4,6 +4,11 @@ import IUser from '../types/user.type';
 
 // Define the user schema
 const userSchema = new mongoose.Schema<IUser>({
+  name :{
+    type: String,
+    required: true,
+    trim: true,
+  },
   username: {
     type: String,
     required: true,
@@ -18,10 +23,21 @@ const userSchema = new mongoose.Schema<IUser>({
     trim: true,
     match: [/^\S+@\S+\.\S+$/, 'Please use a valid email address'],
   },
+  emailVerified: {
+    type: Boolean,
+    required: false,
+    default: false,
+  },
   password: {
     type: String,
-    required: true,
+    required: false,
     minlength: 1,
+    default: "",
+  },
+  image: {
+    type: String,
+    required: false,
+    default: ""
   },
   role: {
     type: String,
