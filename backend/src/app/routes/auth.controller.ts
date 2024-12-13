@@ -1,7 +1,8 @@
 import { type Request, type Response, Router } from "express"
-import User from "../../models/user.model";
-import Session from "../../models/session.model";
+
 import { sign } from 'jsonwebtoken'
+import User from "../models/user.model";
+import Session from "../models/session.model";
 
 const authRouter = Router();
 

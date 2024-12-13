@@ -10,7 +10,7 @@ import { Button } from "@/components/ui/button";
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { toast } from "sonner";
-import { useRouter } from "next/router";
+import { useRouter } from "next/navigation";
 
 const formSchema = z.object({
     email: z.string().email().min(2, {
@@ -21,7 +21,7 @@ const formSchema = z.object({
     }),
 });
 
-export function LoginForm() {
+const LoginForm = () => {
     const { push } = useRouter();
 
     const form = useForm<z.infer<typeof formSchema>>({
@@ -92,3 +92,5 @@ export function LoginForm() {
         </Form>
     );
 }
+
+export default LoginForm

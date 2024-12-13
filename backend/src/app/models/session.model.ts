@@ -1,27 +1,25 @@
-import mongoose, { Schema } from "mongoose";
+import mongoose, { model, Types } from "mongoose";
 import ISession from "../types/session.type";
-import { hash } from "bcryptjs";
 
-const sessionSchema = new mongoose.Schema({
-      sessionToken: {
-            type: "String",
+const sessionSchema = new mongoose.Schema<ISession>({
+      expires: {
+            type: Date,
             required: true,
-            unique: true,
+      },
+      sessionToken: {
+            type: String,
+            required: true,
             trim: true,
       },
       userId: {
-            type: Schema.Types.ObjectId,
-            ref: "user",
+            type: mongoose.Schema.Types.ObjectId,
             required: true,
+            ref: "User"
       }
 }, {
       timestamps: true,
 })
 
-// sessionSchema.pre("save", async function(next){
-//       this.sessionToken = await hash(this.userId._id.toString(), 10)
-//       next();
-// })
+const Session = model<ISession>("Session", sessionSchema)
 
-const Session = mongoose.model<ISession>("Session", sessionSchema)
-export default Session;
+export default Session

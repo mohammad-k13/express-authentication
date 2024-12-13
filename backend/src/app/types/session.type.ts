@@ -1,5 +1,9 @@
-export default interface ISession  {
+import { Document, Types } from 'mongoose'
+
+interface ISession extends Document {
       sessionToken: string,
-      userId: string,
-      createdAt: Date;
+      expires: Date,
+      userId: Types.ObjectId
 }
+
+export default ISession
